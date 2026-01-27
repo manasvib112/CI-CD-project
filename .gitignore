@@ -1,0 +1,9 @@
+node_modules
+.*
+!.gitignore
+# Azure credentials - NEVER commit these!
+azure-cred.json
+*cred*.json
+*secret*.json
+.env
+.env.local
