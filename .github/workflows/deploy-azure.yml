@@ -25,6 +25,27 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Verify Azure Secrets (Debug)
+      run: |
+        echo "Checking if secrets are set..."
+        if [ -z "${{ secrets.AZURE_CLIENT_ID }}" ]; then
+          echo "ERROR: AZURE_CLIENT_ID is not set"
+          exit 1
+        fi
+        if [ -z "${{ secrets.AZURE_TENANT_ID }}" ]; then
+          echo "ERROR: AZURE_TENANT_ID is not set"
+          exit 1
+        fi
+        if [ -z "${{ secrets.AZURE_SUBSCRIPTION_ID }}" ]; then
+          echo "ERROR: AZURE_SUBSCRIPTION_ID is not set"
+          exit 1
+        fi
+        if [ -z "${{ secrets.AZURE_CLIENT_SECRET }}" ]; then
+          echo "ERROR: AZURE_CLIENT_SECRET is not set"
+          exit 1
+        fi
+        echo "✓ All secrets are set (values hidden for security)"
+
     - name: Azure Login
       uses: azure/login@v1
       with:
