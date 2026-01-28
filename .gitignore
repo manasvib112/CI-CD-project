@@ -1,6 +1,7 @@
 node_modules
 .*
 !.gitignore
+!.github/
 # Azure credentials - NEVER commit these!
 azure-cred.json
 *cred*.json
