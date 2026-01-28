@@ -186,15 +186,23 @@ Before using GitHub Actions, you can test manually:
 # Login to ACR
 az acr login --name nodeappregistry
 
-# Build and push image
-az acr build --registry nodeappregistry --image node-app:latest .
+# Get ACR login server
+ACR_LOGIN_SERVER=$(az acr show --name nodeappregistry --resource-group node-app-proj-rg --query loginServer --output tsv)
+
+# Build Docker image locally for Linux/AMD64 (required for Azure)
+docker build --platform linux/amd64 -t $ACR_LOGIN_SERVER/node-app:latest .
+
+# Push image to ACR
+docker push $ACR_LOGIN_SERVER/node-app:latest
 
 # Update container app with new image
 az containerapp update \
   --name node-app \
   --resource-group node-app-proj-rg \
-  --image nodeappregistry.azurecr.io/node-app:latest
+  --image $ACR_LOGIN_SERVER/node-app:latest
 ```
+
+**Note:** The Basic tier of ACR doesn't support `az acr build` (ACR Tasks). You must build the image locally with Docker and push it.
 
 ## Step 13: Deploy via GitHub Actions
 
