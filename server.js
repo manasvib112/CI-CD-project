@@ -3,7 +3,7 @@ const app = express();
 const PORT = 3001;
 
 app.get('/', (req, res) => {
-    res.send('Hello World');
+    res.send(`Hello World ${new Date().toISOString()}`);
 });
 
 app.get('/api/v1/hello', (req, res) => {
