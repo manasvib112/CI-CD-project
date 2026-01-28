@@ -39,8 +39,12 @@ app.get('/api/v1/health', (req, res) => {
       nodeVersion: process.version,
       memory: process.memoryUsage(),
     },
-    // Placeholders: to be filled by a separate service that talks to Azure APIs
     cluster: {
+      // These are configuration values, not live counts from Azure.
+      // Set via env vars like CLUSTER_MIN_REPLICAS / CLUSTER_MAX_REPLICAS
+      minConfigured: Number(process.env.CLUSTER_MIN_REPLICAS) || null,
+      maxConfigured: Number(process.env.CLUSTER_MAX_REPLICAS) || null,
+      // Still placeholders – require calling Azure control plane to populate
       totalInstances: null,
       running: null,
       stopped: null,
