@@ -30,10 +30,21 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Build and push image to Azure Container Registry
+    - name: Login to Azure Container Registry
       run: |
         az acr login --name ${{ env.REGISTRY_NAME }}
-        az acr build --registry ${{ env.REGISTRY_NAME }} --image ${{ env.IMAGE_NAME }}:${{ github.sha }} --image ${{ env.IMAGE_NAME }}:latest .
+    
+    - name: Build and push image to Azure Container Registry
+      run: |
+        # Get ACR login server
+        ACR_LOGIN_SERVER=$(az acr show --name ${{ env.REGISTRY_NAME }} --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --query loginServer --output tsv)
+        
+        # Build Docker image with both tags
+        docker build -t $ACR_LOGIN_SERVER/${{ env.IMAGE_NAME }}:${{ github.sha }} -t $ACR_LOGIN_SERVER/${{ env.IMAGE_NAME }}:latest .
+        
+        # Push images to ACR
+        docker push $ACR_LOGIN_SERVER/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        docker push $ACR_LOGIN_SERVER/${{ env.IMAGE_NAME }}:latest
 
     - name: Deploy to Azure Container Apps
       uses: azure/container-apps-deploy-action@v1
