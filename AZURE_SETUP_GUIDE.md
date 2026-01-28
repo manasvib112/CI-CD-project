@@ -162,10 +162,10 @@ This will output JSON with credentials. Save this output.
    - **AZURE_TENANT_ID**: The Directory (tenant) ID from Step 9
    - **AZURE_SUBSCRIPTION_ID**: Your Azure subscription ID
      - Get it with: `az account show --query id --output tsv`
+   - **AZURE_CLIENT_SECRET**: The client secret value from Step 9
+     - **Important**: This is the secret value, not the secret ID
 
-   **For Option B (CLI method):**
-   - Instead of individual secrets, you can add:
-   - **AZURE_CREDENTIALS**: The entire JSON output from the `az ad sp create-for-rbac` command
+   **Note**: The workflow requires individual secrets (not the combined AZURE_CREDENTIALS JSON).
 
 ## Step 11: Update GitHub Actions Workflow
 
